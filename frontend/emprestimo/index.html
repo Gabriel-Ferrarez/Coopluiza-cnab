@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Empréstimo · CNAB Coopluiza</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --verde: #1a7a4a; --verde-cl: #2da866; --ouro: #c9952a;
+      --bg: #f5f2eb; --bg2: #edeae0; --texto: #1c1c1c;
+      --cinza: #6b6b6b; --branco: #ffffff;
+      --erro: #c0392b; --sucesso: #1a7a4a;
+    }
+    html, body { background: var(--bg); color: var(--texto); font-family: 'DM Sans', sans-serif; min-height: 100%; }
+
+    header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 2.5rem; background: var(--verde);
+      box-shadow: 0 2px 12px rgba(0,0,0,.18);
+    }
+    .logo { display: flex; align-items: center; gap: .75rem; text-decoration: none; }
+    .logo-icon { width: 38px; height: 38px; background: var(--ouro); border-radius: 9px; display: grid; place-items: center; font-size: 1.2rem; }
+    .logo-text strong { font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: #fff; display: block; }
+    .logo-text span { font-size: .7rem; color: rgba(255,255,255,.7); letter-spacing: .06em; }
+    .back-btn {
+      color: rgba(255,255,255,.85); font-size: .85rem; text-decoration: none;
+      display: flex; align-items: center; gap: .4rem;
+      padding: .4rem .9rem; border-radius: 8px; border: 1px solid rgba(255,255,255,.25);
+      transition: background .15s;
+    }
+    .back-btn:hover { background: rgba(255,255,255,.1); }
+
+    .page-hero {
+      background: linear-gradient(135deg, var(--verde) 0%, #145e39 100%);
+      color: #fff; padding: 2.5rem 2.5rem 2rem;
+    }
+    .page-hero h1 { font-family: 'DM Serif Display', serif; font-size: 2rem; }
+    .page-hero p  { margin-top: .4rem; opacity: .8; font-size: .95rem; font-weight: 300; }
+
+    /* ABAS */
+    .tabs {
+      display: flex; gap: 0;
+      background: var(--branco);
+      border-bottom: 2px solid var(--bg2);
+      padding: 0 2.5rem;
+      position: sticky; top: 0; z-index: 10;
+      box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    }
+    .tab {
+      padding: 1rem 1.5rem; font-size: .92rem; font-weight: 500;
+      cursor: pointer; border: none; background: none;
+      border-bottom: 3px solid transparent; margin-bottom: -2px;
+      color: var(--cinza); transition: color .15s, border-color .15s;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .tab.ativo { color: var(--verde); border-bottom-color: var(--verde); }
+
+    .tab-content { display: none; }
+    .tab-content.ativo { display: block; }
+
+    .container { max-width: 860px; margin: 0 auto; padding: 2rem 2rem 3rem; }
+
+    /* FORMULÁRIO */
+    .section-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.2rem; color: var(--verde);
+      margin-bottom: 1.2rem; padding-bottom: .6rem;
+      border-bottom: 1px solid var(--bg2);
+      display: flex; align-items: center; gap: .5rem;
+    }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+    .form-grid.full { grid-template-columns: 1fr; }
+    .form-grid.tres { grid-template-columns: 1fr 1fr 1fr; }
+
+    .field { display: flex; flex-direction: column; gap: .4rem; }
+    .field label { font-size: .82rem; font-weight: 600; color: var(--cinza); letter-spacing: .04em; text-transform: uppercase; }
+    .field input {
+      padding: .7rem .9rem; border: 1.5px solid #ddd; border-radius: 9px;
+      font-size: .95rem; font-family: 'DM Sans', sans-serif;
+      background: var(--branco); color: var(--texto);
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .field input:focus { outline: none; border-color: var(--verde); box-shadow: 0 0 0 3px rgba(26,122,74,.12); }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: .5rem;
+      padding: .8rem 1.6rem; border-radius: 10px;
+      font-size: .92rem; font-weight: 600; font-family: 'DM Sans', sans-serif;
+      cursor: pointer; border: none; transition: opacity .15s, transform .15s;
+    }
+    .btn:hover { opacity: .88; transform: scale(1.02); }
+    .btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+    .btn-verde { background: var(--verde); color: #fff; }
+    .btn-outline { background: transparent; border: 2px solid var(--verde); color: var(--verde); }
+
+    /* TABELA DE PAGAMENTOS */
+    .pagamentos-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: .75rem;
+    }
+    .pagamentos-count {
+      font-size: .82rem; color: var(--cinza);
+      background: var(--bg2); padding: .25rem .7rem; border-radius: 20px;
+    }
+
+    .tabela-wrap { overflow-x: auto; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,.07); }
+    table { width: 100%; border-collapse: collapse; background: var(--branco); }
+    thead tr { background: var(--verde); color: #fff; }
+    th { padding: .75rem 1rem; font-size: .78rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; text-align: left; }
+    td { padding: .75rem 1rem; font-size: .88rem; border-bottom: 1px solid var(--bg2); }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover { background: var(--bg); }
+    .td-remove { cursor: pointer; color: var(--erro); font-weight: 700; background: none; border: none; font-size: 1.1rem; padding: .2rem .5rem; border-radius: 6px; }
+    .td-remove:hover { background: #fdecea; }
+    .tabela-vazia { padding: 2rem; text-align: center; color: var(--cinza); font-size: .9rem; }
+
+    .total-bar {
+      display: flex; align-items: center; justify-content: flex-end; gap: 1.5rem;
+      background: var(--branco); border-radius: 12px; padding: 1rem 1.5rem;
+      margin-top: 1rem; box-shadow: 0 2px 10px rgba(0,0,0,.07);
+      font-size: .95rem;
+    }
+    .total-bar strong { font-size: 1.2rem; color: var(--verde); }
+
+    /* RESULTADO */
+    .resultado-box {
+      display: none; background: var(--branco); border-radius: 16px;
+      padding: 2rem; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,.1);
+      margin-top: 1.5rem;
+    }
+    .resultado-box.show { display: block; animation: fadeUp .4s ease; }
+    .resultado-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .resultado-box h3 { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: var(--sucesso); }
+    .resultado-box p  { color: var(--cinza); margin: .5rem 0 1.5rem; font-size: .95rem; }
+    .resultado-info { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .info-item { text-align: center; }
+    .info-item span { display: block; font-size: .78rem; text-transform: uppercase; letter-spacing: .05em; color: var(--cinza); margin-bottom: .2rem; }
+    .info-item strong { font-size: 1.1rem; color: var(--texto); }
+
+    .alerta {
+      padding: .85rem 1.1rem; border-radius: 10px; font-size: .88rem;
+      display: none; margin-top: .75rem;
+    }
+    .alerta.erro   { background: #fdecea; color: var(--erro); border: 1px solid #f5c6c2; display: block; }
+    .alerta.aviso  { background: #fff8e6; color: #7a5a00; border: 1px solid #f0d88a; display: block; }
+
+    /* UPLOAD */
+    .upload-area {
+      border: 2.5px dashed #ccc; border-radius: 16px;
+      padding: 3rem 2rem; text-align: center; cursor: pointer;
+      transition: border-color .2s, background .2s; background: var(--branco);
+    }
+    .upload-area:hover, .upload-area.drag { border-color: var(--verde); background: #f0faf5; }
+    .upload-area .up-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+    .upload-area h3 { font-family: 'DM Serif Display', serif; font-size: 1.2rem; color: var(--texto); }
+    .upload-area p  { font-size: .88rem; color: var(--cinza); margin-top: .4rem; }
+    #file-input { display: none; }
+
+    .data-field {
+      display: flex; align-items: center; gap: 1rem;
+      background: var(--branco); border-radius: 12px;
+      padding: 1.1rem 1.4rem; margin-top: 1.25rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    }
+    .data-field label { font-weight: 600; font-size: .9rem; white-space: nowrap; }
+    .data-field input { flex: 1; padding: .6rem .9rem; border: 1.5px solid #ddd; border-radius: 8px; font-size: .95rem; font-family: 'DM Sans', sans-serif; }
+    .data-field input:focus { outline: none; border-color: var(--verde); }
+
+    @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:none; } }
+
+    @media (max-width: 640px) {
+      .form-grid, .form-grid.tres { grid-template-columns: 1fr; }
+      .tabs { padding: 0 1rem; }
+      .container { padding: 1.5rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="../index.html">
+    <div class="logo-icon">🏦</div>
+    <div class="logo-text">
+      <strong>Coopluiza</strong>
+      <span>FRANCA · SP</span>
+    </div>
+  </a>
+  <a class="back-btn" href="../index.html">← Voltar</a>
+</header>
+
+<div class="page-hero">
+  <h1>💰 Remessa de Empréstimo</h1>
+  <p>Preencha os dados manualmente ou importe uma planilha Excel</p>
+</div>
+
+<div class="tabs">
+  <button class="tab ativo" onclick="trocarAba('manual')">✏️ Preencher manualmente</button>
+  <button class="tab" onclick="trocarAba('excel')">📊 Importar Excel</button>
+</div>
+
+<!-- ═══════════════════════════════ ABA MANUAL ═══════════════════════ -->
+<div id="tab-manual" class="tab-content ativo">
+<div class="container">
+
+  <div class="section-title">➕ Adicionar pagamento</div>
+
+  <div class="form-grid">
+    <div class="field"><label>Nome completo</label><input id="f-nome" placeholder="JOAO DA SILVA" /></div>
+    <div class="field"><label>CPF / CNPJ</label><input id="f-cpf" placeholder="000.000.000-00" /></div>
+  </div>
+  <div class="form-grid tres">
+    <div class="field"><label>Banco</label><input id="f-banco" placeholder="033" /></div>
+    <div class="field"><label>Agência</label><input id="f-agencia" placeholder="0009" /></div>
+    <div class="field"><label>Conta</label><input id="f-conta" placeholder="13006934" /></div>
+  </div>
+  <div class="form-grid tres">
+    <div class="field"><label>DV Conta</label><input id="f-dv" placeholder="1" /></div>
+    <div class="field"><label>Valor (R$)</label><input id="f-valor" type="number" step="0.01" placeholder="0,00" /></div>
+    <div class="field"><label>Nº Documento</label><input id="f-doc" placeholder="30978131" /></div>
+  </div>
+  <div class="form-grid">
+    <div class="field"><label>Data de pagamento</label><input id="f-data" type="date" /></div>
+  </div>
+
+  <div id="alerta-form" class="alerta"></div>
+
+  <div style="display:flex; gap:.75rem; margin-bottom:2rem;">
+    <button class="btn btn-outline" onclick="adicionarPagamento()">+ Adicionar à lista</button>
+    <button class="btn btn-verde" onclick="limparForm()">🗑 Limpar</button>
+  </div>
+
+  <!-- Lista de pagamentos -->
+  <div class="section-title">📋 Pagamentos na remessa</div>
+  <div class="pagamentos-header">
+    <span></span>
+    <span class="pagamentos-count" id="qtd-label">0 pagamentos</span>
+  </div>
+
+  <div class="tabela-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th><th>Nome</th><th>CPF/CNPJ</th><th>Banco</th><th>Conta</th><th>Valor</th><th>Data</th><th></th>
+        </tr>
+      </thead>
+      <tbody id="tbody-pagamentos">
+        <tr><td colspan="8" class="tabela-vazia">Nenhum pagamento adicionado ainda.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="total-bar">
+    <span>Total da remessa:</span>
+    <strong id="total-label">R$ 0,00</strong>
+  </div>
+
+  <div id="alerta-gerar" class="alerta" style="margin-top:1rem;"></div>
+
+  <div style="display:flex; gap:1rem; margin-top:1.5rem; flex-wrap:wrap;">
+    <button class="btn btn-verde" id="btn-gerar" onclick="gerarCnab()">⚙️ Gerar arquivo CNAB</button>
+  </div>
+
+  <div class="resultado-box" id="resultado">
+    <div class="resultado-icon">✅</div>
+    <h3>Remessa gerada com sucesso!</h3>
+    <p id="res-arquivo"></p>
+    <div class="resultado-info">
+      <div class="info-item"><span>Pagamentos</span><strong id="res-qtd">—</strong></div>
+      <div class="info-item"><span>Total</span><strong id="res-total">—</strong></div>
+      <div class="info-item"><span>Sequencial</span><strong id="res-seq">—</strong></div>
+    </div>
+    <button class="btn btn-verde" id="btn-download">⬇ Baixar arquivo .txt</button>
+  </div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════════ ABA EXCEL ════════════════════════ -->
+<div id="tab-excel" class="tab-content">
+<div class="container">
+
+  <div class="section-title">📥 Modelo de planilha</div>
+  <p style="color:var(--cinza); font-size:.9rem; margin-bottom:1.25rem;">
+    A planilha deve conter as colunas: <strong>Nome, CPF, Banco, Agencia, Conta, DV, Valor, Documento</strong>
+  </p>
+
+  <div class="upload-area" id="upload-area" onclick="document.getElementById('file-input').click()">
+    <div class="up-icon">📂</div>
+    <h3>Clique para selecionar o arquivo Excel</h3>
+    <p>ou arraste e solte aqui · .xlsx ou .xls</p>
+    <p id="file-name" style="margin-top:.75rem; font-weight:600; color:var(--verde);"></p>
+  </div>
+  <input type="file" id="file-input" accept=".xlsx,.xls" onchange="selecionarArquivo(this)"/>
+
+  <div class="data-field">
+    <label>📅 Data de pagamento:</label>
+    <input type="date" id="excel-data" />
+  </div>
+
+  <div id="alerta-excel" class="alerta" style="margin-top:1rem;"></div>
+
+  <div style="margin-top:1.5rem;">
+    <button class="btn btn-verde" id="btn-upload" onclick="enviarExcel()">⚙️ Gerar CNAB a partir da planilha</button>
+  </div>
+
+  <div class="resultado-box" id="resultado-excel">
+    <div class="resultado-icon">✅</div>
+    <h3>Remessa gerada com sucesso!</h3>
+    <p id="res-excel-arquivo"></p>
+    <div class="resultado-info">
+      <div class="info-item"><span>Pagamentos</span><strong id="res-excel-qtd">—</strong></div>
+      <div class="info-item"><span>Total</span><strong id="res-excel-total">—</strong></div>
+      <div class="info-item"><span>Sequencial</span><strong id="res-excel-seq">—</strong></div>
+    </div>
+    <button class="btn btn-verde" id="btn-excel-download">⬇ Baixar arquivo .txt</button>
+    <div id="res-excel-erros" style="margin-top:1rem;"></div>
+  </div>
+
+</div>
+</div>
+
+<script>
+  const API = 'http://localhost:8000';
+  let pagamentos = [];
+  let arquivoSelecionado = null;
+
+  // Hoje como padrão
+  const hoje = new Date().toISOString().split('T')[0];
+  document.getElementById('f-data').value = hoje;
+  document.getElementById('excel-data').value = hoje;
+
+  function trocarAba(aba) {
+    document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('ativo', (i===0&&aba==='manual')||(i===1&&aba==='excel')));
+    document.getElementById('tab-manual').classList.toggle('ativo', aba==='manual');
+    document.getElementById('tab-excel').classList.toggle('ativo', aba==='excel');
+  }
+
+  function limparForm() {
+    ['f-nome','f-cpf','f-banco','f-agencia','f-conta','f-dv','f-valor','f-doc'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('f-data').value = hoje;
+    document.getElementById('alerta-form').className = 'alerta';
+  }
+
+  function fmtMoeda(v) {
+    return new Intl.NumberFormat('pt-BR', {style:'currency', currency:'BRL'}).format(v);
+  }
+
+  function adicionarPagamento() {
+    const alerta = document.getElementById('alerta-form');
+    alerta.className = 'alerta';
+
+    const nome   = document.getElementById('f-nome').value.trim();
+    const cpf    = document.getElementById('f-cpf').value.trim();
+    const banco  = document.getElementById('f-banco').value.trim();
+    const agencia= document.getElementById('f-agencia').value.trim();
+    const conta  = document.getElementById('f-conta').value.trim();
+    const dv     = document.getElementById('f-dv').value.trim() || '0';
+    const valor  = parseFloat(document.getElementById('f-valor').value);
+    const doc    = document.getElementById('f-doc').value.trim();
+    const data   = document.getElementById('f-data').value;
+
+    if (!nome || !cpf || !banco || !agencia || !conta || !data || isNaN(valor) || valor <= 0) {
+      alerta.textContent = '⚠️ Preencha todos os campos obrigatórios e um valor válido.';
+      alerta.className = 'alerta erro';
+      return;
+    }
+
+    const [ano,mes,dia] = data.split('-');
+    pagamentos.push({ nome, cpf_cnpj: cpf, banco, agencia, conta, dv_conta: dv, valor, documento: doc, data_pagamento: `${dia}/${mes}/${ano}` });
+    renderTabela();
+    limparForm();
+  }
+
+  function renderTabela() {
+    const tbody = document.getElementById('tbody-pagamentos');
+    if (!pagamentos.length) {
+      tbody.innerHTML = '<tr><td colspan="8" class="tabela-vazia">Nenhum pagamento adicionado ainda.</td></tr>';
+      document.getElementById('qtd-label').textContent = '0 pagamentos';
+      document.getElementById('total-label').textContent = 'R$ 0,00';
+      return;
+    }
+    tbody.innerHTML = pagamentos.map((p, i) => `
+      <tr>
+        <td>${i+1}</td>
+        <td>${p.nome}</td>
+        <td>${p.cpf_cnpj}</td>
+        <td>${p.banco}</td>
+        <td>${p.conta}-${p.dv_conta}</td>
+        <td>${fmtMoeda(p.valor)}</td>
+        <td>${p.data_pagamento}</td>
+        <td><button class="td-remove" onclick="remover(${i})">✕</button></td>
+      </tr>`).join('');
+    document.getElementById('qtd-label').textContent = `${pagamentos.length} pagamento(s)`;
+    const total = pagamentos.reduce((s, p) => s + p.valor, 0);
+    document.getElementById('total-label').textContent = fmtMoeda(total);
+  }
+
+  function remover(i) {
+    pagamentos.splice(i, 1);
+    renderTabela();
+  }
+
+  async function gerarCnab() {
+    const alerta = document.getElementById('alerta-gerar');
+    alerta.className = 'alerta';
+    document.getElementById('resultado').classList.remove('show');
+
+    if (!pagamentos.length) {
+      alerta.textContent = '⚠️ Adicione pelo menos um pagamento antes de gerar.';
+      alerta.className = 'alerta erro';
+      return;
+    }
+
+    const btn = document.getElementById('btn-gerar');
+    btn.disabled = true;
+    btn.textContent = '⏳ Gerando...';
+
+    try {
+      const res = await fetch(`${API}/cnab/emprestimo`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ pagamentos })
+      });
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.detail || 'Erro ao gerar CNAB');
+
+      document.getElementById('res-arquivo').textContent  = data.nome_arquivo;
+      document.getElementById('res-qtd').textContent      = data.qtd_pagamentos;
+      document.getElementById('res-total').textContent    = fmtMoeda(data.total);
+      document.getElementById('res-seq').textContent      = data.seq_usado;
+      document.getElementById('btn-download').onclick     = () => window.open(`${API}/cnab/download/${data.nome_arquivo}`, '_blank');
+      document.getElementById('resultado').classList.add('show');
+      pagamentos = [];
+      renderTabela();
+    } catch(e) {
+      alerta.textContent = '❌ ' + e.message;
+      alerta.className = 'alerta erro';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = '⚙️ Gerar arquivo CNAB';
+    }
+  }
+
+  // ── EXCEL ─────────────────────────────────────
+  function selecionarArquivo(input) {
+    arquivoSelecionado = input.files[0];
+    document.getElementById('file-name').textContent = arquivoSelecionado ? '📄 ' + arquivoSelecionado.name : '';
+  }
+
+  const ua = document.getElementById('upload-area');
+  ua.addEventListener('dragover', e => { e.preventDefault(); ua.classList.add('drag'); });
+  ua.addEventListener('dragleave', () => ua.classList.remove('drag'));
+  ua.addEventListener('drop', e => {
+    e.preventDefault(); ua.classList.remove('drag');
+    const f = e.dataTransfer.files[0];
+    if (f) { arquivoSelecionado = f; document.getElementById('file-name').textContent = '📄 ' + f.name; }
+  });
+
+  async function enviarExcel() {
+    const alerta = document.getElementById('alerta-excel');
+    alerta.className = 'alerta';
+    document.getElementById('resultado-excel').classList.remove('show');
+
+    if (!arquivoSelecionado) {
+      alerta.textContent = '⚠️ Selecione um arquivo Excel primeiro.';
+      alerta.className = 'alerta erro';
+      return;
+    }
+
+    const dataVal = document.getElementById('excel-data').value;
+    if (!dataVal) {
+      alerta.textContent = '⚠️ Informe a data de pagamento.';
+      alerta.className = 'alerta erro';
+      return;
+    }
+
+    const [ano,mes,dia] = dataVal.split('-');
+    const dataFmt = `${dia}/${mes}/${ano}`;
+
+    const btn = document.getElementById('btn-upload');
+    btn.disabled = true;
+    btn.textContent = '⏳ Processando...';
+
+    try {
+      const form = new FormData();
+      form.append('arquivo', arquivoSelecionado);
+      form.append('data_pagamento', dataFmt);
+
+      const res = await fetch(`${API}/cnab/emprestimo/upload-excel`, { method: 'POST', body: form });
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.detail || 'Erro ao processar planilha');
+
+      document.getElementById('res-excel-arquivo').textContent = data.nome_arquivo;
+      document.getElementById('res-excel-qtd').textContent     = data.qtd_pagamentos;
+      document.getElementById('res-excel-total').textContent   = fmtMoeda(data.total);
+      document.getElementById('res-excel-seq').textContent     = data.seq_usado;
+      document.getElementById('btn-excel-download').onclick    = () => window.open(`${API}/cnab/download/${data.nome_arquivo}`, '_blank');
+
+      if (data.erros_planilha?.length) {
+        document.getElementById('res-excel-erros').innerHTML =
+          `<div class="alerta aviso">⚠️ ${data.erros_planilha.length} linha(s) ignorada(s): ` +
+          data.erros_planilha.map(e => `Linha ${e.linha}: ${e.erro}`).join(', ') + '</div>';
+      }
+
+      document.getElementById('resultado-excel').classList.add('show');
+    } catch(e) {
+      alerta.textContent = '❌ ' + e.message;
+      alerta.className = 'alerta erro';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = '⚙️ Gerar CNAB a partir da planilha';
+    }
+  }
+</script>
+</body>
+</html>

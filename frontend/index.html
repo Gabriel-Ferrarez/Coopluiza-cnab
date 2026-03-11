@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CNAB Coopluiza</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --verde:    #1a7a4a;
+      --verde-cl: #2da866;
+      --ouro:     #c9952a;
+      --ouro-cl:  #f0b84a;
+      --bg:       #f5f2eb;
+      --bg2:      #edeae0;
+      --texto:    #1c1c1c;
+      --cinza:    #6b6b6b;
+      --branco:   #ffffff;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--texto);
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    /* ── HEADER ─────────────────────────────── */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.4rem 2.5rem;
+      background: var(--verde);
+      box-shadow: 0 2px 12px rgba(0,0,0,.18);
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+    }
+    .logo-icon {
+      width: 42px; height: 42px;
+      background: var(--ouro);
+      border-radius: 10px;
+      display: grid; place-items: center;
+      font-size: 1.4rem;
+    }
+    .logo-text { color: #fff; }
+    .logo-text strong { font-family: 'DM Serif Display', serif; font-size: 1.25rem; display: block; }
+    .logo-text span   { font-size: .75rem; opacity: .75; letter-spacing: .06em; }
+    .header-tag {
+      background: rgba(255,255,255,.15);
+      color: #fff;
+      font-size: .72rem;
+      letter-spacing: .08em;
+      padding: .35rem .85rem;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,.25);
+    }
+
+    /* ── HERO ────────────────────────────────── */
+    .hero {
+      text-align: center;
+      padding: 3.5rem 1rem 2rem;
+    }
+    .hero h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      color: var(--verde);
+      line-height: 1.15;
+    }
+    .hero h1 em { font-style: italic; color: var(--ouro); }
+    .hero p {
+      margin-top: .75rem;
+      color: var(--cinza);
+      font-size: 1.05rem;
+      font-weight: 300;
+    }
+
+    /* ── CARDS ───────────────────────────────── */
+    .cards {
+      display: flex;
+      gap: 1.75rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      padding: 1rem 2rem 3rem;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: var(--branco);
+      border: 2px solid transparent;
+      border-radius: 18px;
+      width: 380px;
+      padding: 2.25rem 2rem;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color .2s, transform .2s, box-shadow .2s;
+      box-shadow: 0 2px 12px rgba(0,0,0,.07);
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 5px;
+      background: var(--card-accent, var(--verde));
+      border-radius: 18px 18px 0 0;
+    }
+    .card:hover {
+      border-color: var(--card-accent, var(--verde));
+      transform: translateY(-4px);
+      box-shadow: 0 10px 32px rgba(0,0,0,.12);
+    }
+    .card.emprestimo { --card-accent: var(--verde); }
+    .card.beneficio  { --card-accent: var(--ouro); }
+
+    .card-icon {
+      width: 56px; height: 56px;
+      border-radius: 14px;
+      display: grid; place-items: center;
+      font-size: 1.7rem;
+      margin-bottom: 1.2rem;
+    }
+    .emprestimo .card-icon { background: #e6f4ec; }
+    .beneficio  .card-icon { background: #fdf3e0; }
+
+    .card h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.5rem;
+      margin-bottom: .4rem;
+      color: var(--texto);
+    }
+    .card p {
+      color: var(--cinza);
+      font-size: .92rem;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .card-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: .45rem;
+      margin-bottom: 1.75rem;
+    }
+    .card-features li {
+      font-size: .85rem;
+      color: var(--cinza);
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .card-features li::before {
+      content: '✓';
+      font-weight: 700;
+      color: var(--card-accent, var(--verde));
+      flex-shrink: 0;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .75rem 1.5rem;
+      border-radius: 10px;
+      font-size: .92rem;
+      font-weight: 600;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      border: none;
+      transition: opacity .15s, transform .15s;
+      text-decoration: none;
+    }
+    .btn:hover { opacity: .88; transform: scale(1.02); }
+    .btn-verde { background: var(--verde); color: #fff; }
+    .btn-ouro  { background: var(--ouro);  color: #fff; }
+
+    /* ── HISTÓRICO RÁPIDO ────────────────────── */
+    .historico-section {
+      max-width: 860px;
+      margin: 0 auto 3rem;
+      padding: 0 2rem;
+    }
+    .historico-section h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.3rem;
+      color: var(--verde);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    #lista-historico {
+      background: var(--branco);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,.06);
+    }
+    .hist-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: .9rem 1.4rem;
+      border-bottom: 1px solid var(--bg2);
+      font-size: .88rem;
+      transition: background .15s;
+    }
+    .hist-item:last-child { border-bottom: none; }
+    .hist-item:hover { background: var(--bg); }
+    .hist-nome { font-weight: 500; color: var(--texto); }
+    .hist-data { color: var(--cinza); font-size: .82rem; }
+    .hist-badge {
+      font-size: .72rem;
+      padding: .2rem .6rem;
+      border-radius: 20px;
+      font-weight: 600;
+      letter-spacing: .04em;
+    }
+    .badge-emp { background: #e6f4ec; color: var(--verde); }
+    .badge-ben { background: #fdf3e0; color: var(--ouro); }
+    .hist-download {
+      background: none; border: 1px solid #ddd;
+      border-radius: 8px; padding: .3rem .7rem;
+      font-size: .8rem; cursor: pointer; color: var(--cinza);
+      transition: border-color .15s, color .15s;
+    }
+    .hist-download:hover { border-color: var(--verde); color: var(--verde); }
+    .hist-vazio { padding: 1.5rem; text-align: center; color: var(--cinza); font-size: .9rem; }
+
+    /* ── FOOTER ──────────────────────────────── */
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      font-size: .78rem;
+      color: var(--cinza);
+      border-top: 1px solid var(--bg2);
+    }
+
+    /* ── ANIMAÇÃO ENTRADA ────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero   { animation: fadeUp .5s ease both; }
+    .cards  { animation: fadeUp .5s .1s ease both; }
+    .historico-section { animation: fadeUp .5s .2s ease both; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">🏦</div>
+    <div class="logo-text">
+      <strong>Coopluiza</strong>
+      <span>FRANCA · SP</span>
+    </div>
+  </div>
+  <span class="header-tag">CNAB 240 · Santander Pagfor</span>
+</header>
+
+<div class="hero">
+  <h1>Gerador de <em>Remessas</em> CNAB</h1>
+  <p>Selecione o tipo de pagamento para gerar o arquivo de remessa</p>
+</div>
+
+<div class="cards">
+  <a class="card emprestimo" href="emprestimo/index.html">
+    <div class="card-icon">💰</div>
+    <h2>Empréstimo</h2>
+    <p>Gere remessas de pagamento para empréstimos de associados via PIX ou crédito em conta.</p>
+    <ul class="card-features">
+      <li>Preencher manualmente</li>
+      <li>Importar planilha Excel</li>
+      <li>Download imediato do arquivo</li>
+    </ul>
+    <span class="btn btn-verde">Gerar remessa →</span>
+  </a>
+
+  <a class="card beneficio" href="beneficio/index.html">
+    <div class="card-icon">🎁</div>
+    <h2>Benefícios</h2>
+    <p>Gere remessas de pagamento de benefícios como VA, VR, plano de saúde e outros.</p>
+    <ul class="card-features">
+      <li>Preencher manualmente</li>
+      <li>Importar planilha Excel</li>
+      <li>Envio futuro para Contas a Pagar</li>
+    </ul>
+    <span class="btn btn-ouro">Gerar remessa →</span>
+  </a>
+</div>
+
+<div class="historico-section">
+  <h3>📋 Últimas remessas geradas</h3>
+  <div id="lista-historico">
+    <div class="hist-vazio">Carregando histórico...</div>
+  </div>
+</div>
+
+<footer>
+  Coopluiza · Franca/SP &nbsp;·&nbsp; CNAB 240 Santander Pagfor &nbsp;·&nbsp; v1.0
+</footer>
+
+<script>
+  const API = 'http://localhost:8000';
+
+  async function carregarHistorico() {
+    const el = document.getElementById('lista-historico');
+    try {
+      const res = await fetch(`${API}/cnab/historico`);
+      const data = await res.json();
+      const arquivos = data.arquivos || [];
+
+      if (!arquivos.length) {
+        el.innerHTML = '<div class="hist-vazio">Nenhuma remessa gerada ainda.</div>';
+        return;
+      }
+
+      el.innerHTML = arquivos.slice(0, 8).map(a => {
+        const isEmp = a.nome.includes('EMPRESTIMO');
+        const badge = isEmp
+          ? '<span class="hist-badge badge-emp">Empréstimo</span>'
+          : '<span class="hist-badge badge-ben">Benefício</span>';
+        return `
+          <div class="hist-item">
+            <div>
+              <div class="hist-nome">${a.nome}</div>
+              <div class="hist-data">${a.gerado_em}</div>
+            </div>
+            ${badge}
+            <button class="hist-download" onclick="baixar('${a.nome}')">⬇ Baixar</button>
+          </div>`;
+      }).join('');
+    } catch {
+      el.innerHTML = '<div class="hist-vazio">Servidor offline. Inicie o backend primeiro.</div>';
+    }
+  }
+
+  function baixar(nome) {
+    window.open(`${API}/cnab/download/${nome}`, '_blank');
+  }
+
+  carregarHistorico();
+</script>
+
+</body>
+</html>
