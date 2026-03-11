@@ -3,7 +3,7 @@ import os
 import sys
 from pathlib import Path
 from dotenv import load_dotenv
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
@@ -52,6 +52,28 @@ def health_check():
         "docs": "/docs",
     }
 
+
+
+# =============================================================================
+# SERVIR MODELOS DE PLANILHA
+# =============================================================================
+modelos_path = Path(__file__).parent.parent / "modelos_planilhas"
+
+@app.get("/modelos/emprestimo", tags=["Modelos"])
+def modelo_emprestimo():
+    f = modelos_path / "modelo_emprestimo.xlsx"
+    if not f.exists():
+        raise HTTPException(status_code=404, detail="Modelo não encontrado")
+    return FileResponse(str(f), filename="modelo_emprestimo.xlsx",
+              media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+
+@app.get("/modelos/beneficio", tags=["Modelos"])
+def modelo_beneficio():
+    f = modelos_path / "modelo_beneficio.xlsx"
+    if not f.exists():
+        raise HTTPException(status_code=404, detail="Modelo não encontrado")
+    return FileResponse(str(f), filename="modelo_beneficio.xlsx",
+              media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
 
 # =============================================================================
 # SERVIR O FRONTEND (arquivos estáticos)
