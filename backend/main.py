@@ -79,13 +79,31 @@ def modelo_beneficio():
 # SERVIR O FRONTEND (arquivos estáticos)
 # =============================================================================
 
+# =============================================================================
+# SERVIR FRONTEND
+# =============================================================================
+
 frontend_path = Path(__file__).parent.parent / "frontend"
 
 if frontend_path.exists():
-    # Serve o frontend completo como arquivos estáticos
-    app.mount("/emprestimo", StaticFiles(directory=str(frontend_path / "emprestimo"), html=True), name="emprestimo")
-    app.mount("/beneficio", StaticFiles(directory=str(frontend_path / "beneficio"), html=True), name="beneficio")
-    app.mount("/app", StaticFiles(directory=str(frontend_path), html=True), name="frontend")
+
+    # arquivos estáticos
+    app.mount("/assets", StaticFiles(directory=str(frontend_path / "assets")), name="assets")
+
+    # página principal
+    @app.get("/", include_in_schema=False)
+    def home():
+        return FileResponse(frontend_path / "index.html")
+
+    # página empréstimo
+    @app.get("/emprestimo", include_in_schema=False)
+    def emprestimo():
+        return FileResponse(frontend_path / "emprestimo" / "emprestimo.html")
+
+    # página benefício
+    @app.get("/beneficio", include_in_schema=False)
+    def beneficio():
+        return FileResponse(frontend_path / "beneficio" / "beneficio.html")
 
 
 # =============================================================================
