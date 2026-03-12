@@ -53,7 +53,7 @@ class PagamentoEmprestimo(BaseModel):
             "dv_conta": self.dv_conta,
             "valor": self.valor,
             "documento": self.documento,
-            "data_pagamento": datetime.strptime(self.data_pagamento, "%d/%m/%Y"),
+            "data_pagamento": self.data_pagamento,  # mantém string DD/MM/YYYY para o motor_cnab
         }
 
 
