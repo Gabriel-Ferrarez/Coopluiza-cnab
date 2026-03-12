@@ -261,8 +261,8 @@
 </div>
 
 <div class="cards">
-  <a class="card emprestimo" href="emprestimo/index.html">
-    <div class="card-icon">💰</div>
+  <a class="card emprestimo" href="emprestimo/emprestimo.html">
+    <div class="card-icon"><svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 1 0 0 7h5a3.5 3.5 0 1 1 0 7H6"/></svg></div>
     <h2>Empréstimo</h2>
     <p>Gere remessas de pagamento para empréstimos de associados via PIX ou crédito em conta.</p>
     <ul class="card-features">
@@ -273,8 +273,8 @@
     <span class="btn btn-verde">Gerar remessa →</span>
   </a>
 
-  <a class="card beneficio" href="beneficio/index.html">
-    <div class="card-icon">🎁</div>
+  <a class="card beneficio" href="beneficio/beneficio.html">
+    <div class="card-icon"><svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg></div>
     <h2>Benefícios</h2>
     <p>Gere remessas de pagamento de benefícios como Educa+ , Visão+ e Esporte+</p>
     <ul class="card-features">
@@ -287,7 +287,7 @@
 </div>
 
 <div class="historico-section">
-  <h3>📋 Últimas remessas geradas</h3>
+  <h3><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg> Últimas remessas geradas</h3>
   <div id="lista-historico">
     <div class="hist-vazio">Carregando histórico...</div>
   </div>
@@ -324,7 +324,7 @@
               <div class="hist-data">${a.gerado_em}</div>
             </div>
             ${badge}
-            <button class="hist-download" onclick="baixar('${a.nome}')">⬇ Baixar</button>
+            <button class="hist-download" onclick="baixar('${a.nome}')"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Baixar</button>
           </div>`;
       }).join('');
     } catch {

@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: coopluiza-cnab
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r ../requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: SEQ_ARQUIVO
+        value: 1396
+      - key: PORT
+        value: 10000
+    disk:
+      name: historico
+      mountPath: /opt/render/project/src/historico
+      sizeGB: 1

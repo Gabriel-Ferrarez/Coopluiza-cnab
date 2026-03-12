@@ -82,11 +82,10 @@ def modelo_beneficio():
 frontend_path = Path(__file__).parent.parent / "frontend"
 
 if frontend_path.exists():
-    app.mount("/static", StaticFiles(directory=str(frontend_path / "assets")), name="static")
-
-    @app.get("/app", include_in_schema=False)
-    def servir_frontend():
-        return FileResponse(str(frontend_path / "index.html"))
+    # Serve o frontend completo como arquivos estáticos
+    app.mount("/emprestimo", StaticFiles(directory=str(frontend_path / "emprestimo"), html=True), name="emprestimo")
+    app.mount("/beneficio", StaticFiles(directory=str(frontend_path / "beneficio"), html=True), name="beneficio")
+    app.mount("/app", StaticFiles(directory=str(frontend_path), html=True), name="frontend")
 
 
 # =============================================================================
